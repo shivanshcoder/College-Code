@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="BisectionMethod.h" />
     <ClInclude Include="FalsePosition.h" />
+    <ClInclude Include="Secant.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

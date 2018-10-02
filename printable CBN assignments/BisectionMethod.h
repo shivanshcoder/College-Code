@@ -58,12 +58,13 @@ void Iterations(int decimalCorrectness) {
 		ithValue = func(x2);
 		saveToFile << "\nf(" << x2 << ") = " << ithValue;
 
-		if (ithValue > 0) {
-			saveToFile << " > 0";
+		if (ithValue == 0) {
+			break;
+		}
+		else if ((ithValue * func(Range.first))> 0 ) {
 			Range.second = x2;
 		}
 		else {
-			saveToFile << " < 0";
 			Range.first = x2;
 		}
 

@@ -1,6 +1,6 @@
-#define printFunsc(x) std::cout << "\n\nf(" << x << ")  =  " << x << "^3 -" << x << " - 1"
+#define printFunc(x) std::cout << "\n\nf(" << x << ")  =  " << x << "^3 -2*" << x << " - 5"
 
-#include"BisectionMethod.h"
+#include"FalsePosition.h"
 
 //float func(float x) {
 //	return (x*x*x) - 2 * x - 5;
@@ -29,7 +29,7 @@
 //}
 
 float func(float x) {
-	return pow(x, 3) - x - 1;
+	return pow(x, 3) - 2*x - 5;
 }
 
 //void printFunc(float x) {

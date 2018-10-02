@@ -21,6 +21,9 @@
     <ClInclude Include="BisectionMethod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Secant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

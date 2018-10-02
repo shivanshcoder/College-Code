@@ -40,28 +40,39 @@ std::pair<float, float> FindingRootRange(float startRange = 0.0) {
 
 void Iterations(int decimalCorrectness) {
 	std::pair<float, float> Range = FindingRootRange();
+
+	std::pair<float, float> f_Range;
 	int ithIteration = 0;
 	float x2;
-	float ithValue;
+	float f_x2;
+	
 
 
 	while (++ithIteration) {
+		f_Range = std::make_pair(func(Range.first), func(Range.second));
 
-		x2 = (Range.first + Range.second) / 2;
+		x2 = (Range.first*f_Range.second - Range.second*f_Range.first) / (f_Range.second - f_Range.first);
+
+		f_x2 = func(x2);
 		saveToFile << "\n\nIteration " << ithIteration
-			<< "\nTaking a = " << Range.first << "  and  b =  " << Range.second
-			<< "\nx{" << ithIteration << "}  =  (a+b)/2  =  "
-			<< "(" << Range.first << ", " << Range.second << ")/2  =  " << x2;
+			<< "\nTaking a = " << Range.first << "  and  b =  " << Range.second;
 
-		ithValue = func(x2);
-		saveToFile << "\nf(" << x2 << ") = " << ithValue;
+		saveToFile << "\nx{" << ithIteration << "}  =  ( a*f(b) - b*f(a) ) / ( f(b) - f(a) ) ";
 
-		if (ithValue > 0) {
-			saveToFile << " > 0";
+		saveToFile << "\nx{" << ithIteration << "}  =  "
+			<< "( " << Range.first << " * " << f_Range.second << "  -  " << Range.second << " * " << f_Range.first << " ) / ( "
+			<< f_Range.second << " - " << f_Range.first << " )  =" << x2;
+
+		printFunc(x2);
+		saveToFile << "\nf(" << x2 << ") = " << f_x2;
+
+		if (f_x2 == 0) {
+			break;
+		}
+		else if ((f_x2 * func(Range.first)) > 0) {
 			Range.second = x2;
 		}
 		else {
-			saveToFile << " < 0";
 			Range.first = x2;
 		}
 
@@ -70,8 +81,9 @@ void Iterations(int decimalCorrectness) {
 		float temp = Range.first*pow(10, decimalCorrectness);
 		float temp2 = Range.second*pow(10, decimalCorrectness);
 		if ((int)(Range.first*pow(10, decimalCorrectness)) == (int)(Range.second*pow(10, decimalCorrectness))) {
-			saveToFile << "\n\nThe Root " << x2 << "  Correct upto " << decimalCorrectness << " Decimals";
 			break;
 		}
 	}
+
+	saveToFile << "\n\nThe Root " << x2 << "  Correct upto " << decimalCorrectness << " Decimals";
 }

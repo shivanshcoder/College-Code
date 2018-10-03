@@ -7,13 +7,10 @@
 
 float func(float x);
 
-
 #ifndef printFunc
 #define printFunc(x) std::cout<<"\nERROR printFunc MACRO not Found"
 #endif // !printFunc
 
-
-//void printFunc(float x);
 
 extern std::string FileName;
 
@@ -22,14 +19,13 @@ extern std::string FileName;
 //Finds the range
 std::pair<float, float> FindingRootRange(float startRange = 0.0) {
 
-	printFunc("x");
 	if (func(startRange) < 0.0) {
 
-		while (func((startRange += .5)) < 0.0);
+		while (func(startRange += .5) < 0.0);
 
 		//Negative side
 		printFunc(startRange - 0.5);
-		saveToFile << " = " << func((startRange - 0.5)) << " < 0";
+		saveToFile << " = " << func(startRange - 0.5) << " < 0";
 
 		//Positive side
 		printFunc(startRange);
@@ -44,37 +40,45 @@ std::pair<float, float> FindingRootRange(float startRange = 0.0) {
 
 void Iterations(int decimalCorrectness) {
 	std::pair<float, float> Range = FindingRootRange();
+
+	std::pair<float, float> f_Range;
 	int ithIteration = 0;
-	float x2;
-	float ithValue;
+	float x2 = Range.first;
+	float x2_Old;
+
 	while (++ithIteration) {
+		f_Range = std::make_pair(func(Range.first), func(Range.second));
 
-		x2 = (Range.first + Range.second) / 2;
+		x2_Old = x2;
+		x2 = (Range.first*f_Range.second - Range.second*f_Range.first) / (f_Range.second - f_Range.first);
+
+		//f_x2 = func(x2);
 		saveToFile << "\n\nIteration " << ithIteration
-			<< "\nTaking a = " << Range.first << "  and  b =  " << Range.second
-			<< "\nx{" << ithIteration << "}  =  (a+b)/2  =  "
-			<< "(" << Range.first << ", " << Range.second << ")/2  =  " << x2;
+			<< "\nTaking a = " << Range.first << "  and  b =  " << Range.second;
 
-		ithValue = func(x2);
-		saveToFile << "\nf(" << x2 << ") = " << ithValue;
+		saveToFile << "\nf(a) = " << f_Range.first << " and f(b) = " << f_Range.second;
 
-		if (ithValue == 0) {
+		saveToFile << "\nx{" << ithIteration << "}  =  ( a*f(b) - b*f(a) ) / ( f(b) - f(a) ) ";
+
+		saveToFile << "\nx{" << ithIteration << "}  =  "
+			<< "( " << Range.first << " * " << f_Range.second << "  -  " << Range.second << " * " << f_Range.first << " ) / ( "
+			<< f_Range.second << " - " << f_Range.first << " )  =" << x2;
+
+		//printFunc(x2);
+		//saveToFile << "\nf(" << x2 << ") = " << f_x2;
+
+		if (func(x2) == 0) {
 			break;
 		}
-		else if ((ithValue * func(Range.first)) > 0) {
-			Range.second = x2;
-		}
-		else {
-			Range.first = x2;
-		}
+		Range.first = Range.second;
+		Range.second = x2;
 
-		saveToFile << "\nroot lies between: " << Range.first << " and " << Range.second;
+		//saveToFile << "\nroot lies between: " << Range.first << " and " << Range.second;
 
-		float temp = Range.first*pow(10, decimalCorrectness);
-		float temp2 = Range.second*pow(10, decimalCorrectness);
-		if ((int)(Range.first*pow(10, decimalCorrectness)) == (int)(Range.second*pow(10, decimalCorrectness))) {
-			saveToFile << "\n\nThe Root " << x2 << "  Correct upto " << decimalCorrectness << " Decimals";
+		if ((int)(x2*pow(10, decimalCorrectness)) == (int)(x2_Old*pow(10, decimalCorrectness))) {
 			break;
 		}
 	}
+
+	saveToFile << "\n\nThe Root " << x2 << "  Correct upto " << decimalCorrectness << " Decimals";
 }
